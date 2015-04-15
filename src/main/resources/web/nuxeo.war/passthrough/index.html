@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>Nuxeo ES API Passthrough</title>
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="bower_components/semantic-ui/dist/semantic.min.css">
+    <script src="bower_components/semantic-ui/dist/semantic.min.js"></script>
+    <script src="bower_components/elasticsearch/elasticsearch.jquery.min.js"></script>
+    <script src="bower_components/nuxeo/lib/jquery/nuxeo.js"></script>
+    <script src="bower_components/mustache/mustache.min.js"></script>
+    <script src="bower_components/jquery-Mustache/jquery.mustache.js"></script>
+    <script src="resources/javascript/demo.js"></script>
+    <link rel="stylesheet" type="text/css" href="resources/css/style.css">
+</head>
+<body>
+<header class="header">
+    <img src="resources/img/logo340x60.png" height="35" width="210">
+    <span id="search" class="ui search">
+        <span class="ui icon input">
+            <input id="keywords" class="prompt" placeholder="Keywords..." type="text">
+            <i id="searchIcon" class="search icon"></i>
+        </span>
+    </span>
+</header>
+<div id="results" class="ui grid">
+    <div class="four wide column">
+        <div id="aggregates"></div>
+    </div>
+    <div class="eight wide column">
+        <div id="searchResults" class="ui items"></div>
+    </div>
+    <div class="four wide column">
+    </div>
+</div>
+</body>
+</html>

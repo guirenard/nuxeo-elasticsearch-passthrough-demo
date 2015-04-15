@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Bundle-Vendor: Nuxeo
+Bundle-Version: 1.0.0
+Bundle-Name: nuxeo-elasticsearch-passthrough-demo
+Bundle-ManifestVersion: 1
+Bundle-SymbolicName: org.nuxeo.labs.demo.es.passthrough
