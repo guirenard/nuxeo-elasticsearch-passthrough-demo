@@ -23,6 +23,7 @@ mvn clean install
 
 ## Deploying
 Copy the jar package from target to the nxserver/bundles folder of your server
+You will also need to build and deploy this [module] (https://github.com/nuxeo/nuxeo/tree/master/nuxeo-features/nuxeo-elasticsearch/nuxeo-elasticsearch-http-read-only)
 
 ## Use
 You can access the demo app at http://host:8080/nuxeo/passthrough
