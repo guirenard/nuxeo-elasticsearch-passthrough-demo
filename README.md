@@ -1,6 +1,3 @@
-## About 
-This project is an on-going project, supported by Nuxeo.
-
 ## Important Note
 
 **These features are not part of the Nuxeo Production platform.**
