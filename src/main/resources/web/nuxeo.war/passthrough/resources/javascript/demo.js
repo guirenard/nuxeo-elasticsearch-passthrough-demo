@@ -93,7 +93,7 @@ var API = (function(API) {
 
 	function callbackSearch(resp) {
 
-		processResponseAggregates(resp);
+		processRangeAggregates(resp);
 
 		$.Mustache.load('./resources/templates/result_list.html').done(function(){
 		 var rendered = $.Mustache.render('resultsTemplate',{hits: resp.hits.hits});
@@ -109,15 +109,23 @@ var API = (function(API) {
 
 	////////////////////////////// UTILS
 
-	function processResponseAggregates(resp) {
+	function processRangeAggregates(resp) {
 		var buckets = resp.aggregations.modified.buckets;
 		for (i = 0; i < buckets.length; i++) {
+			processRangeKey(buckets[i]);
 			buckets[i].label = API.lastModifiedLabels[buckets.length-1-i];
 		}
 
 		buckets = resp.aggregations.size.buckets;
 		for (i = 0; i < buckets.length; i++) {
+			processRangeKey(buckets[i]);
 			buckets[i].label = API.sizeLabels[i];
+		}
+	};
+
+	function processRangeKey(bucket) {
+		if (typeof bucket.key === 'undefined') {
+			bucket.key = "from-"+bucket.from+"to-"+bucket.to;
 		}
 	};
 
