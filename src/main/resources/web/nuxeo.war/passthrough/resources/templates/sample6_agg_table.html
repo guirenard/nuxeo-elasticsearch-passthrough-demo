@@ -1,0 +1,22 @@
+<script id="aggTableTemplate" type="x-tmpl-mustache">
+    <table class="agg" >
+  <thead>
+   <tr>
+    <th>Assignee</th>
+    <th>Average Validation Waiting</th>
+   </tr>
+  </thead>
+  <tbody>
+   {{#buckets}}
+    <tr>
+     <td>
+      {{key}}
+     </td>
+     <td>
+      {{#computed}}{{label}}{{/computed}}
+     </td>
+    </tr>
+   {{/buckets}}
+  </tbody>
+ </table>
+</script>

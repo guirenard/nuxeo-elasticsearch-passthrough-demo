@@ -1,0 +1,30 @@
+<script id="aggTableTemplate" type="x-tmpl-mustache">
+    <table class="agg" >
+		<thead>
+			<tr>
+				<th>ID(?)</th>
+				<th>Requester</th>
+				<th>Linked Document</th>
+				<th>Duration</th>
+			</tr>
+		</thead>
+		<tbody>
+			{{#docs}}
+				<tr>
+					<td>
+						REQ-{{_id}}
+					</td>
+					<td>
+						{{_source.initiator}}
+					</td>
+					<td>
+						blabalbah
+					</td>
+					<td>
+						{{_source.duration}}
+					</td>
+				</tr>
+			{{/docs}}
+		</tbody>
+	</table>
+</script>

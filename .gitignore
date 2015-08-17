@@ -1,3 +1,7 @@
 .idea
 target
 bower_components
+.classpath
+.project
+.settings
+

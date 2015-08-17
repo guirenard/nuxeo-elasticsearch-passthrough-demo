@@ -1,39 +1,180 @@
 ﻿<!DOCTYPE html>
 <html>
-<head>
+  <head>
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <title>Nuxeo ES API Passthrough</title>
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" href="bower_components/semantic-ui/dist/semantic.min.css">
+    <link rel="stylesheet" type="text/css" href="bower_components/jqplot-bower/dist/jquery.jqplot.css">
+    <link rel="stylesheet" type="text/css" href="resources/css/style.css">
     <script src="bower_components/semantic-ui/dist/semantic.min.js"></script>
     <script src="bower_components/elasticsearch/elasticsearch.jquery.min.js"></script>
     <script src="bower_components/nuxeo/lib/jquery/nuxeo.js"></script>
     <script src="bower_components/mustache/mustache.min.js"></script>
     <script src="bower_components/jquery-Mustache/jquery.mustache.js"></script>
+    <script src="bower_components/d3/d3.js"></script>
+    <script type="text/javascript" src="bower_components/jqplot-bower/dist/jquery.jqplot.js"></script>
+    <script type="text/javascript" src="bower_components/jqplot-bower/dist/plugins/jqplot.pieRenderer.js"></script>
+    <script type="text/javascript" src="bower_components/jqplot-bower/dist/plugins/jqplot.donutRenderer.js"></script>
+    <script type="text/javascript" src="bower_components/jqplot-bower/dist/plugins/jqplot.barRenderer.js"></script>
+    <script type="text/javascript" src="bower_components/jqplot-bower/dist/plugins/jqplot.categoryAxisRenderer.js"></script>
+    <script type="text/javascript" src="bower_components/jqplot-bower/dist/plugins/jqplot.pointLabels.js"></script>
+    <script type="text/javascript" src="bower_components/jqplot-bower/dist/plugins/jqplot.dateAxisRenderer.js"></script>
+    <script type="text/javascript" src="bower_components/jqplot-bower/dist/plugins/jqplot.logAxisRenderer.js"></script>
+    <script type="text/javascript" src="bower_components/jqplot-bower/dist/plugins/jqplot.canvasTextRenderer.js"></script>
+    <script type="text/javascript" src="bower_components/jqplot-bower/dist/plugins/jqplot.canvasAxisTickRenderer.js"></script>
+    <script type="text/javascript" src="bower_components/jqplot-bower/dist/plugins/jqplot.highlighter.js"></script>
     <script src="resources/javascript/demo.js"></script>
-    <link rel="stylesheet" type="text/css" href="resources/css/style.css">
-</head>
-<body>
-<header class="header">
-    <img src="resources/img/logo340x60.png" height="35" width="210">
-    <span id="search" class="ui search">
-        <span class="ui icon input">
-            <input id="keywords" class="prompt" placeholder="Keywords..." type="text">
-            <i id="searchIcon" class="search icon"></i>
+  </head>
+  <body>
+    <header class="header">
+        <img src="resources/img/logo340x60.png" height="35" width="210">
+        <span id="search" class="ui search">
+            <span class="ui icon input">
+                <input id="keywords" class="prompt" placeholder="Keywords..." type="text">
+                <i id="searchIcon" class="search icon"></i>
+            </span>
         </span>
-    </span>
-</header>
-<div id="results" class="ui grid">
-    <div class="four wide column">
-        <div id="aggregates"></div>
+    </header>
+    <div class="rowChart">
+      <div class="ui top attached tabular menu">
+        <a class="item active" data-tab="monitoring" onclick="loadTab1();">Monitoring</a>
+        <a class="item" data-tab="analytics" onclick="loadTab2();">Analytics</a>
+      </div>
+      <div class="ui active bottom attached tab segment" data-tab="monitoring">
+        
+        Total Number of Running Travel Expense Requests: <span id="totalInstance"></span>
+        
+        <div class="ui grid">
+          <div class="eight wide column">
+            <h2>Running Instances Per Department of requester</h2>
+            <div id="wfRunningInstancePerDep" class="reload">
+            </div>
+          </div>
+          <div class="eight wide column">
+            <h2>Running Instances Per Active Node Per Assignee</h2>
+            <div id="wfRunningInstancePerActiveNode" class="reload">
+            </div>
+          </div>
+        </div>
+        
+        <div class="ui grid">
+          <div class="eight wide column">
+            <h2>Top 5 longer Requests</h2>
+            <div id="topNLongerRequest" class="reload">
+            </div>
+          </div>
+          <div class="eight wide column">
+          </div>
+        </div>
+        
+         <div class="ui grid">
+          <div class="eight wide column">
+            <h2>All Open Request</h2>
+            <div id="allOpenRequest" class="reload">
+            </div>
+          </div>
+          <div class="eight wide column">
+          </div>
+        </div>
+        
+        <script>
+          function loadTab1() {
+            jQuery("div.reload").empty();
+            API.loadSample11();
+            API.loadSample12();
+            API.loadSample13();
+            API.loadSample14();
+          }
+        </script>
+      </div>
+      <div class="ui bottom attached tab segment" data-tab="analytics">
+        <h1>Travel Expense Process - General Data</h1>
+
+        <div class="ui grid">
+          <div class="five wide column">
+            <h2>Workflow Length</h2>
+            <div id="wfDuration" class="reload">
+            </div>
+          </div>
+          <div class="four wide column">
+            <h2>Expenses Cost Repartitions</h2>
+            <div id="expenseAmount" class="reload">
+            </div>
+          </div>
+          <div class="seven wide column">
+            <h2>Number of requests</h2>
+            <div id="nbRequest" class="reload">
+            </div>
+          </div>
+        </div>
+
+        <div class="ui grid">
+          <div class="eight wide column">
+            <h2>Top Requester (nb of request)</h2>
+            <div id="wfTopRequestNb" class="reload">
+            </div>
+          </div>
+          <div class="eight wide column">
+            <h2>Top Requester (total amount)</h2>
+            <div id="wfTopRequestAmount" class="reload">
+            </div>
+          </div>
+        </div>
+
+        <h1>Travel Expense Process - Step Analysis - Manager</h1>
+        <div class="ui grid">
+          <div class="five wide column">
+            <h2>Validation Time</h2>
+            <div id="validationTime" class="reload">
+            </div>
+          </div>
+          <div class="four wide column">
+            <h2>Average Result</h2>
+            <div id="averageResult" class="reload">
+            </div>
+          </div>
+          <div class="seven wide column">
+            <h2>Result Depending on Department</h2>
+            <div id="resultDepOnDest" class="reload">
+            </div>
+          </div>
+        </div>
+
+        <h1>Travel Expense Process - Step Analysis - Accountancy</h1>
+        <div class="ui grid">
+          <div class="eight wide column">
+            <h2>Sum of Expenses Registered per department per year</h2>
+            <div id="sumExpenses" class="reload">
+            </div>
+          </div>
+          <div class="eight wide column" class="reload">
+          </div>
+        </div>
+
+        <script>
+         function loadTab2() {
+            jQuery("div.grid > div.column > div").empty();
+            API.loadSample1();
+            API.loadSample2();
+            API.loadSample3();
+            API.loadSample4();
+            API.loadSample5();
+            API.loadSample6();
+            API.loadSample7();
+            API.loadSample8();
+            API.loadSample9();
+            API.loadSample10();
+          }
+        </script>
+      </div>
+      <script>
+        $(document).ready(function () {
+          loadTab1();
+        });
+      </script>
     </div>
-    <div class="eight wide column">
-        <div id="searchResults" class="ui items"></div>
-    </div>
-    <div class="four wide column">
-    </div>
-</div>
-</body>
+  </body>
 </html>

@@ -1,0 +1,22 @@
+<script id="aggTableTemplate" type="x-tmpl-mustache">
+    <table class="agg" >
+		<thead>
+			<tr>
+				<th>Department of the requester</th>
+				<th>Length of the processus</th>
+			</tr>
+		</thead>
+		<tbody>
+			{{#buckets}}
+				<tr>
+					<td>
+						{{key}}
+					</td>
+					<td>
+						{{#computed}}{{label}}{{/computed}}
+					</td>
+				</tr>
+			{{/buckets}}
+		</tbody>
+	</table>
+</script>
