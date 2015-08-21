@@ -31,6 +31,7 @@
     "semantic-ui": "~1.11.6",
     "mustache": "~2.0.0",
     "d3": "~3.4.1",
-    "jqplot-bower": "~1.0.8"
+    "jqplot-bower": "~1.0.8",
+    "jquery-ui": "~1.11.4"
   }
 }

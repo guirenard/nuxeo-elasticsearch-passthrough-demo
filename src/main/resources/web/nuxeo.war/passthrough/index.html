@@ -5,16 +5,18 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <title>Nuxeo ES API Passthrough</title>
-    <script src="bower_components/jquery/dist/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" href="bower_components/semantic-ui/dist/semantic.min.css">
     <link rel="stylesheet" type="text/css" href="bower_components/jqplot-bower/dist/jquery.jqplot.css">
+    <link rel="stylesheet" type="text/css" href="bower_components/jquery-ui/themes/smoothness/jquery-ui.css">
     <link rel="stylesheet" type="text/css" href="resources/css/style.css">
-    <script src="bower_components/semantic-ui/dist/semantic.min.js"></script>
-    <script src="bower_components/elasticsearch/elasticsearch.jquery.min.js"></script>
-    <script src="bower_components/nuxeo/lib/jquery/nuxeo.js"></script>
-    <script src="bower_components/mustache/mustache.min.js"></script>
-    <script src="bower_components/jquery-Mustache/jquery.mustache.js"></script>
-    <script src="bower_components/d3/d3.js"></script>
+    <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="bower_components/jquery-ui/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="bower_components/semantic-ui/dist/semantic.min.js"></script>
+    <script type="text/javascript" src="bower_components/elasticsearch/elasticsearch.jquery.min.js"></script>
+    <script type="text/javascript" src="bower_components/nuxeo/lib/jquery/nuxeo.js"></script>
+    <script type="text/javascript" src="bower_components/mustache/mustache.min.js"></script>
+    <script type="text/javascript" src="bower_components/jquery-Mustache/jquery.mustache.js"></script>
+    <script type="text/javascript" src="bower_components/d3/d3.js"></script>
     <script type="text/javascript" src="bower_components/jqplot-bower/dist/jquery.jqplot.js"></script>
     <script type="text/javascript" src="bower_components/jqplot-bower/dist/plugins/jqplot.pieRenderer.js"></script>
     <script type="text/javascript" src="bower_components/jqplot-bower/dist/plugins/jqplot.donutRenderer.js"></script>
@@ -33,8 +35,12 @@
         <img src="resources/img/logo340x60.png" height="35" width="210">
         <span id="search" class="ui search">
             <span class="ui icon input">
-                <input id="keywords" class="prompt" placeholder="Keywords..." type="text">
-                <i id="searchIcon" class="search icon"></i>
+                <input id="from" class="prompt" placeholder="From" type="text">
+                <i id="searchIcon" class="calendar icon"></i>
+            </span>
+            <span class="ui icon input">
+                <input id="to" class="prompt" placeholder="From" type="text">
+                <i id="searchIcon" class="calendar icon"></i>
             </span>
         </span>
     </header>
@@ -44,9 +50,9 @@
         <a class="item" data-tab="analytics" onclick="loadTab2();">Analytics</a>
       </div>
       <div class="ui active bottom attached tab segment" data-tab="monitoring">
-        
+
         Total Number of Running Travel Expense Requests: <span id="totalInstance"></span>
-        
+
         <div class="ui grid">
           <div class="eight wide column">
             <h2>Running Instances Per Department of requester</h2>
@@ -59,7 +65,7 @@
             </div>
           </div>
         </div>
-        
+
         <div class="ui grid">
           <div class="eight wide column">
             <h2>Top 5 longer Requests</h2>
@@ -69,7 +75,7 @@
           <div class="eight wide column">
           </div>
         </div>
-        
+
          <div class="ui grid">
           <div class="eight wide column">
             <h2>All Open Request</h2>
@@ -79,7 +85,7 @@
           <div class="eight wide column">
           </div>
         </div>
-        
+
         <script>
           function loadTab1() {
             jQuery("div.reload").empty();
@@ -172,6 +178,34 @@
       </div>
       <script>
         $(document).ready(function () {
+          $( "#from" ).val(API.minDate);
+          $( "#to" ).val(API.maxDate);
+          $( "#from" ).datepicker({
+            defaultDate: "+1w",
+            dateFormat: "yy-mm-dd",
+            changeMonth: true,
+            numberOfMonths: 3,
+            showButtonPanel: true,
+            onClose: function( selectedDate ) {
+              $( "#to" ).datepicker( "option", "minDate", selectedDate );
+              API.minDate=selectedDate;
+              loadTab1();
+              loadTab2();
+            }
+          });
+          $( "#to" ).datepicker({
+            defaultDate: "+1w",
+            dateFormat: "yy-mm-dd",
+            changeMonth: true,
+            numberOfMonths: 3,
+            showButtonPanel: true,
+            onClose: function( selectedDate ) {
+              $( "#from" ).datepicker( "option", "maxDate", selectedDate );
+              API.maxDate=selectedDate;
+              loadTab1();
+              loadTab2();
+            }
+          });
           loadTab1();
         });
       </script>

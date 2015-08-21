@@ -2,8 +2,9 @@ var API = (function(API) {
 
     var esClient;
 
-    var minDate = "2015-08-16";
-    var maxDate = "2015-08-20"
+    API.dateFormat = "yyyy-MM-dd";
+    API.minDate = "2015-08-16";
+    API.maxDate = "2015-08-20"
 
     var query1 = {
         index: 'audit',
@@ -77,7 +78,7 @@ var API = (function(API) {
                             { term: { "extended.modelName": "TravelExpenseValidation"}},
                             { term: { "extended.taskName": "wf.travelExpenses.create"}},
                             { term: { "docLifeCycle": "ended"}},
-                            { range: {"eventDate": {"gte": minDate, "lte": maxDate}}} ]
+                            { range: {"eventDate": {"gte": API.minDate, "lte": API.maxDate}}} ]
                 }
             },
             // Aggregate on the results
@@ -92,10 +93,10 @@ var API = (function(API) {
                                 field : "eventDate",
                                 interval : "day",
                                 min_doc_count: 0,
-                                format : "yyyy-MM-dd",
+                                format : API.dateFormat,
                                 extended_bounds : {
-                                    min : minDate,
-                                    max : maxDate
+                                    min : API.minDate,
+                                    max : API.maxDate
                                 }
                             }
                         }
@@ -121,7 +122,7 @@ var API = (function(API) {
                             { term: { "extended.modelName": "TravelExpenseValidation"}},
                             { term: { "extended.taskName": "wf.travelExpenses.create"}},
                             { term: { "docLifeCycle": "ended"}},
-                            { range: {"eventDate": {"gte": minDate, "lte": maxDate}}} ]
+                            { range: {"eventDate": {"gte": API.minDate, "lte": API.maxDate}}} ]
                 }
             },
             // Aggregate on the results
@@ -136,10 +137,10 @@ var API = (function(API) {
                                 field : "eventDate",
                                 interval : "day",
                                 min_doc_count: 0,
-                                format : "yyyy-MM-dd",
+                                format : API.dateFormat,
                                 extended_bounds : {
-                                    min : minDate,
-                                    max : maxDate
+                                    min : API.minDate,
+                                    max : API.maxDate
                                 }
                             },
                             aggs: {
@@ -256,7 +257,7 @@ var API = (function(API) {
                             { term: { "eventId": "afterWorkflowTaskEnded"}},
                             { term: { "extended.modelName": "TravelExpenseValidation"}},
                             { term: { "extended.taskName": "Accept/ Reject"}},
-                            { range: {"eventDate": {"gte": minDate, "lte": maxDate}}} ]
+                            { range: {"eventDate": {"gte": API.minDate, "lte": API.maxDate}}} ]
                 }
             },
             // Aggregate on the results
@@ -269,10 +270,10 @@ var API = (function(API) {
                                 field : "eventDate",
                                 interval : "day",
                                 min_doc_count: 0,
-                                format : "yyyy-MM-dd",
+                                format : API.dateFormat,
                                 extended_bounds : {
-                                    min : minDate,
-                                    max : maxDate
+                                    min : API.minDate,
+                                    max : API.maxDate
                                 }
                             },
                             aggs: {
@@ -381,7 +382,36 @@ var API = (function(API) {
                             { term: { "ecm:title": "wf.travelExpenseValidation"}},
                             { term: { "ecm:currentLifeCycleState": "running"}} ]
                 }
+            }
+            // End query.
+        }
+    };
+
+    var query14 = {
+        index: 'nuxeo',
+        size: 1000,
+        body: {
+            sort : [
+                { "dc:created" : {"order" : "asc"}}
+            ],
+            // Begin query.
+            query: {
+                // Boolean query for matching and excluding items.
+                bool: {
+                    must: [ { term: { "ecm:primaryType": "RoutingTask" }},
+                            { term: { "ecm:currentLifeCycleState": "opened"}} ]
+                }
             },
+            filter : {
+                or : [
+                    {
+                        term : { "nt:name" : "Accept/ Reject" }
+                    },
+                    {
+                        term : { "nt:name" : "Accountancy" }
+                    }
+                ]
+            }
             // End query.
         }
     };
@@ -656,8 +686,8 @@ var API = (function(API) {
                             angle: -30,
                             textColor: '#dddddd'
                         },
-                        min: minDate,
-                        max: maxDate,
+                        min: API.minDate,
+                        max: API.maxDate,
                         tickInterval: "1 days",
                         drawMajorGridlines: false
                     },
@@ -1022,6 +1052,27 @@ var API = (function(API) {
         });
     }
 
+    API.loadSample14 = function() {
+        // Sum expenses / department
+        esClient.search(query14).then(function(resp) {
+            console.log(resp);
+            $.Mustache.load('./resources/templates/sample14_agg_table.html').done(function(){
+                var docs = resp.hits.hits;
+                for (i = 0; i < docs.length; i++) {
+                    var created  = docs[i]._source["dc:created"];
+                    var duration =  new Date() - new Date(created);
+                    docs[i]._source.duration = formatDuration(duration);
+                    docs[i]._source.initiator = docs[i]._source["nt:initiator"];
+                }
+                var rendered = $.Mustache.render('aggTableTemplate',{docs: docs});
+                $('#allOpenRequest').html(rendered);
+            });
+
+        }, function (err) {
+            console.trace(err.message);
+        });
+    }
+
     API.loadData =function() {
         API.loadSample1();
         API.loadSample2();
@@ -1035,6 +1086,8 @@ var API = (function(API) {
         API.loadSample10();
         API.loadSample11();
         API.loadSample12();
+        API.loadSample13();
+        API.loadSample14();
     };
 
     return API;
