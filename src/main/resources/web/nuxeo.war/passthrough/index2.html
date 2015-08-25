@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>Nuxeo ES API Passthrough</title>
+    <link rel="stylesheet" type="text/css" href="bower_components/semantic-ui/dist/semantic.min.css">
+    <link rel="stylesheet" type="text/css" href="bower_components/jqplot-bower/dist/jquery.jqplot.css">
+    <link rel="stylesheet" type="text/css" href="bower_components/jquery-ui/themes/smoothness/jquery-ui.css">
+    <link rel="stylesheet" type="text/css" href="resources/css/style2.css">
+    <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="bower_components/jquery-ui/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="bower_components/semantic-ui/dist/semantic.min.js"></script>
+    <script type="text/javascript" src="bower_components/elasticsearch/elasticsearch.jquery.min.js"></script>
+    <script type="text/javascript" src="bower_components/nuxeo/lib/jquery/nuxeo.js"></script>
+    <script type="text/javascript" src="bower_components/mustache/mustache.min.js"></script>
+    <script type="text/javascript" src="bower_components/jquery-Mustache/jquery.mustache.js"></script>
+    <script type="text/javascript" src="bower_components/d3/d3.js"></script>
+    <script type="text/javascript" src="bower_components/jqplot-bower/dist/jquery.jqplot.js"></script>
+    <script type="text/javascript" src="bower_components/jqplot-bower/dist/plugins/jqplot.pieRenderer.js"></script>
+    <script type="text/javascript" src="bower_components/jqplot-bower/dist/plugins/jqplot.donutRenderer.js"></script>
+    <script type="text/javascript" src="bower_components/jqplot-bower/dist/plugins/jqplot.barRenderer.js"></script>
+    <script type="text/javascript" src="bower_components/jqplot-bower/dist/plugins/jqplot.categoryAxisRenderer.js"></script>
+    <script type="text/javascript" src="bower_components/jqplot-bower/dist/plugins/jqplot.pointLabels.js"></script>
+    <script type="text/javascript" src="bower_components/jqplot-bower/dist/plugins/jqplot.dateAxisRenderer.js"></script>
+    <script type="text/javascript" src="bower_components/jqplot-bower/dist/plugins/jqplot.logAxisRenderer.js"></script>
+    <script type="text/javascript" src="bower_components/jqplot-bower/dist/plugins/jqplot.canvasTextRenderer.js"></script>
+    <script type="text/javascript" src="bower_components/jqplot-bower/dist/plugins/jqplot.canvasAxisTickRenderer.js"></script>
+    <script type="text/javascript" src="bower_components/jqplot-bower/dist/plugins/jqplot.highlighter.js"></script>
+    <script type="text/javascript" src="bower_components/Chart.js/Chart.js"></script>
+    <script type="text/javascript" src="resources/javascript/uStates.js"></script>
+    <script type="text/javascript" src="resources/javascript/demo2.js"></script>
+  </head>
+  <body>
+    <header class="header">
+        <img src="resources/img/logo340x60.png" height="35" width="210">
+        <span id="search" class="ui search">
+            <span class="ui icon input">
+                <input id="from" class="prompt" placeholder="From" type="text">
+                <i id="searchIcon" class="calendar icon"></i>
+            </span>
+            <span class="ui icon input">
+                <input id="to" class="prompt" placeholder="From" type="text">
+                <i id="searchIcon" class="calendar icon"></i>
+            </span>
+        </span>
+    </header>
+    <div class="rowChart">
+        <h2>Incident Kind by State</h2>
+        <div id="tooltip"></div><!-- div to hold tooltip. -->
+        <svg width="960" height="600" id="statesvg"></svg> <!-- svg to hold the map. -->
+         <h2>Incident Number and Amount by Kind</h2>
+        <canvas id="kindPerTotal" width="600" height="400"></canvas>
+    </div>
+  </body>
+</html>
